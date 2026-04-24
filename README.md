@@ -114,7 +114,7 @@ geobasemap streets;
 title('Sahadaki Ölçüm Noktaları (Gerçek Koordinatlar)');
 ```
 
-![](main_03.png){vspace="5" hspace="5"}
+![alt text](html/main_03.png "")
 
 ## 1. Veriyi Matris Formuna Dönüştürme (Reshape)
 
@@ -177,7 +177,7 @@ scatter(x_meas, y_meas, 15, 'w', 'filled', 'MarkerFaceAlpha', 0.6);
 legend('Anomali Değerleri', 'Ölçüm Noktaları', Location='northoutside');
 ```
 
-![](main_04.png){vspace="5" hspace="5"}
+![alt text](html/main_04.png "")
 
 [Published with MATLAB®
 R2025b](https://www.mathworks.com/products/matlab/)
