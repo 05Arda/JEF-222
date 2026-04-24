@@ -132,5 +132,3 @@ hold on;
 
 scatter(x_meas, y_meas, 15, 'w', 'filled', 'MarkerFaceAlpha', 0.6);
 legend('Anomali Değerleri', 'Ölçüm Noktaları', Location='northoutside');
-
-hold off;
