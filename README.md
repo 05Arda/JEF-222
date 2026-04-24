@@ -1,6 +1,3 @@
-
-::: content
-
 ## Contents
 
 <div>
