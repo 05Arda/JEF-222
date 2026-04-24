@@ -94,7 +94,6 @@ z = reshape(magneticAnomaly, numMeters, numProfiles)';
 % y: Profiller arası mesafe (0, 1, 2, 3, 4, 5, 6. metreler)
 x = 0:(numMeters-1);                                % 0, 1, 2, ..., 30
 y = 0:profileRange:(numProfiles-1)*profileRange;    % 0, 1, 2, ..., 6
-[x_meas, y_meas] = meshgrid(x, y);
 
 %% 2. Yeni Grid ve İnterpolasyon
 % X ve Y'yi daha düşük ölçüm aralıkları ile veri alınmış gibi hazırlıyoruz
@@ -121,16 +120,7 @@ set(h, 'LineColor', 'none');
 colormap(jet);
 colorbar;
 shading interp;
-
-title(sprintf("İnterpole Edilmiş (x: %.2f m , y: %.2f m) Manyetik Anomali Haritası", dx, dy));
+title('İnterpole Edilmiş (0.2m) Manyetik Anomali Haritası');
 xlabel('Mesafe (m)');
 ylabel('Profil (m)');
 axis equal;
-
-% Gerçek ölçüm noktalarının haritaya yerleştirilmesi
-hold on;
-
-scatter(x_meas, y_meas, 15, 'w', 'filled', 'MarkerFaceAlpha', 0.6);
-legend('Anomali Değerleri', 'Ölçüm Noktaları', Location='northoutside');
-
-hold off;
