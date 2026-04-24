@@ -78,8 +78,8 @@ lats_vec = linspace(coordinats(1, 1), coordinats(3, 1), numProfiles);
 lons_vec = linspace(coordinats(1, 2), coordinats(2, 2), numMeters);
 
 [LON, LAT] = meshgrid(lons_vec, lats_vec);
-figure(2);
 
+figure(2);
 % 'satellite', 'streets', 'topographic'
 geoscatter(LAT(:), LON(:), 30, 'filled', 'MarkerEdgeColor', 'k');
 geobasemap streets;
@@ -94,6 +94,8 @@ z = reshape(magneticAnomaly, numMeters, numProfiles)';
 % y: Profiller arası mesafe (0, 1, 2, 3, 4, 5, 6. metreler)
 x = 0:(numMeters-1);                                % 0, 1, 2, ..., 30
 y = 0:profileRange:(numProfiles-1)*profileRange;    % 0, 1, 2, ..., 6
+
+% Ölçüm noktalarını haritada göstermek için hazırlıyoruz
 [x_meas, y_meas] = meshgrid(x, y);
 
 %% 2. Yeni Grid ve İnterpolasyon
@@ -114,7 +116,7 @@ Z = griddata(x, y, z, X, Y, 'v4');
 
 %% Contour Map - Görselleştirme
 figure;
-[C, h] = contourf(X, Y, Z, 15); % 15 -> Renk paletindeki, renk sayısı
+[C, h] = contourf(X, Y, Z, 15); % 15 -> Renk paletindeki renk sayısı
 
 set(h, 'LineColor', 'none');
 
