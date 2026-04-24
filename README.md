@@ -70,15 +70,7 @@ profileMeasures(6*numMeters +7) = mean( ...
     'omitnan');
 ```
 
-```codeoutput
-Warning: Column headers from the file were modified to make them valid MATLAB
-identifiers before creating variable names for the table. The original column
-headers are saved in the VariableDescriptions property.
-Set 'VariableNamingRule' to 'preserve' to use the original column headers as
-table variable names. 
-```
-
-![](main_01.png){vspace="5" hspace="5"}
+![alt text](html/main_01.png "")
 
 ## Günlük Değişim (Diurnal) Düzeltmesi
 
@@ -96,9 +88,7 @@ tDiurnal = profileMeasures - interpolatedBase + tMean;
 ```
 
 
-```markdown
-![alt text](html/main_02.png "Title")
-```
+![alt text](html/main_02.png "")
 
 ## IGRF Düzeltmesi
 
