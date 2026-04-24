@@ -1,4 +1,23 @@
-%% Parametreler
+
+::: content
+
+## Contents
+
+<div>
+
+- [Parametreler](#1)
+- [Günlük Değişim (Diurnal) Düzeltmesi](#2)
+- [IGRF Düzeltmesi](#3)
+- [Harita Üzerinde Ölçüm Noktalarının Görselleştirilmesi](#4)
+- [1. Veriyi Matris Formuna Dönüştürme (Reshape)](#5)
+- [2. Yeni Grid ve İnterpolasyon](#6)
+- [Contour Map - Görselleştirme](#7)
+
+</div>
+
+## Parametreler
+
+```codeinput
 numProfiles = 7;
 numMeters = 31; % 0'dan 30'a kadar 31 nokta
 profileRange = 1; % Profiller arası mesafe (metre).
@@ -49,11 +68,21 @@ profileMeasures(6*numMeters +7) = mean( ...
     profileMeasures(6*numMeters +7 -meanWindow: ...
     6*numMeters +7 +meanWindow), ...
     'omitnan');
+```
 
+```codeoutput
+Warning: Column headers from the file were modified to make them valid MATLAB
+identifiers before creating variable names for the table. The original column
+headers are saved in the VariableDescriptions property.
+Set 'VariableNamingRule' to 'preserve' to use the original column headers as
+table variable names. 
+```
 
+![](main_01.png){vspace="5" hspace="5"}
 
-%% Günlük Değişim (Diurnal) Düzeltmesi
+## Günlük Değişim (Diurnal) Düzeltmesi
 
+```codeinput
 % Profil ölçümlerinin yapıldığı saatlerdeki teorik Baz değerlerini
 % interpolasyon yardımıyla hesaplıyoruz
 interpolatedBase = interp1(basetimes, baseMeasures, profiletimes, 'spline');
@@ -64,16 +93,25 @@ legend("Baz Ölçümleri (Ham)", "Baz Ölçümleri (Interpolated)")
 % omitnan -> omit nan (NaN değerlerini çıkartarak ortalama hesaplar)
 tMean = mean(baseMeasures, 'omitnan');
 tDiurnal = profileMeasures - interpolatedBase + tMean;
+```
 
 
-%% IGRF Düzeltmesi
+```markdown
+![alt text](html/main_02.png "Title")
+```
+
+## IGRF Düzeltmesi
+
+```codeinput
 jsonFile = fileread('./igrfwmmData.json');
 IGRF_F = jsondecode(jsonFile).result.totalintensity;    % Toplam manyetik alan (nT)
 
 magneticAnomaly = tDiurnal - IGRF_F;
+```
 
+## Harita Üzerinde Ölçüm Noktalarının Görselleştirilmesi
 
-%% Harita Üzerinde Ölçüm Noktalarının Görselleştirilmesi
+```codeinput
 lats_vec = linspace(coordinats(1, 1), coordinats(3, 1), numProfiles);
 lons_vec = linspace(coordinats(1, 2), coordinats(2, 2), numMeters);
 
@@ -84,10 +122,15 @@ figure(2);
 geoscatter(LAT(:), LON(:), 30, 'filled', 'MarkerEdgeColor', 'k');
 geobasemap streets;
 title('Sahadaki Ölçüm Noktaları (Gerçek Koordinatlar)');
+```
 
-%% 1. Veriyi Matris Formuna Dönüştürme (Reshape)
-% magneticAnomaly (217x1) -> z (7x31)
+![](main_03.png){vspace="5" hspace="5"}
 
+## 1. Veriyi Matris Formuna Dönüştürme (Reshape)
+
+magneticAnomaly (217x1) -\> z (7x31)
+
+```codeinput
 z = reshape(magneticAnomaly, numMeters, numProfiles)';
 
 % x: Profil boyu (0'dan 30. metreye)
@@ -97,9 +140,14 @@ y = 0:profileRange:(numProfiles-1)*profileRange;    % 0, 1, 2, ..., 6
 
 % Ölçüm noktalarını haritada göstermek için hazırlıyoruz
 [x_meas, y_meas] = meshgrid(x, y);
+```
 
-%% 2. Yeni Grid ve İnterpolasyon
-% X ve Y'yi daha düşük ölçüm aralıkları ile veri alınmış gibi hazırlıyoruz
+## 2. Yeni Grid ve İnterpolasyon
+
+X ve Y\'yi daha düşük ölçüm aralıkları ile veri alınmış gibi
+hazırlıyoruz
+
+```codeinput
 dx = 0.2;
 dy = 0.2;
 
@@ -112,9 +160,11 @@ y_int = 0:dy:(numProfiles-1)*profileRange;
 
 Z = griddata(x, y, z, X, Y, 'v4');
 %Z = interp2(x, y, z, X, Y, 'linear');
+```
 
+## Contour Map - Görselleştirme
 
-%% Contour Map - Görselleştirme
+```codeinput
 figure;
 [C, h] = contourf(X, Y, Z, 15); % 15 -> Renk paletindeki renk sayısı
 
@@ -135,3 +185,10 @@ hold on;
 
 scatter(x_meas, y_meas, 15, 'w', 'filled', 'MarkerFaceAlpha', 0.6);
 legend('Anomali Değerleri', 'Ölçüm Noktaları', Location='northoutside');
+```
+
+![](main_04.png){vspace="5" hspace="5"}
+
+[Published with MATLAB®
+R2025b](https://www.mathworks.com/products/matlab/)
+:::
